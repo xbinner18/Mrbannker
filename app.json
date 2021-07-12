@@ -1,0 +1,18 @@
+{
+  "env": {
+    "ENV": {
+      "description": "Setting this to ANYTHING will enable env variables. But, you need to understand the code to know what to set here!",
+      "value": "ANYTHING"
+    },
+    "TOKEN": {
+      "description": "Your bot token, as a string.",
+      "value": "",
+      "required": true
+    },
+    "URL": {
+      "description": "type your url where hosted api.php",
+      "value": "",
+      "required": true
+    }
+  }
+}
