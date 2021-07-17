@@ -7,6 +7,7 @@ from aiogram import Bot, Dispatcher, executor, types
 
 ENV = bool(os.environ.get('ENV', True))
 TOKEN = os.environ.get("TOKEN", None)
+BLACKLISTED = os.environ.get("BLACKLISTED", None)
 URL = os.environ.get("URL", None) 
 PREFIX = "!/"
 
@@ -31,6 +32,11 @@ async def ch(message: types.Message):
     tic = time.perf_counter()
     await message.answer_chat_action("typing")
     cc = message.text[len('/chk '):]
+    _bin = cc[0:10]
+    if _bin in BLACKLISTED:
+        return await message.reply(
+            "<b>BLACKLISTED BIN</b>"
+            )
     if not cc:
         return await message.reply(
             "<code>Send Card /chk cc|mm|yy|cvv.</code>"
