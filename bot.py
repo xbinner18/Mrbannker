@@ -9,7 +9,7 @@ from aiogram import Bot, Dispatcher, executor, types
 
 ENV = bool(os.environ.get('ENV', True))
 TOKEN = os.environ.get("TOKEN", None)
-URL = os.environ.get("URL", None) 
+BLACKLISTED = os.environ.get("BLACKLISTED", None) 
 PREFIX = "!/"
 
 # Configure logging
@@ -104,6 +104,11 @@ async def ch(message: types.Message):
         return await message.reply(
             "<code>Send Card /chk cc|mm|yy|cvv.</code>"
         )   
+    BIN = cc[:6]
+    if BIN in BLACKLISTED:
+        return await message.reply(
+            "<b>BLACKLISTED BIN</b>"
+            )
     # get guid muid sid
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4571.0 Safari/537.36 Edg/93.0.957.0",
