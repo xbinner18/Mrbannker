@@ -33,7 +33,7 @@ rnd = ''.join(random.choices(string.ascii_lowercase +
 async def helpstr(message: types.Message):
     await message.answer_chat_action("typing")
     await message.reply(
-        "Hello how to use <code>/chk cc/mm/yy/cvv</code>\nREPO [HERE](https://github.com/xbinner18/Mrbannker)"
+        "Hello how to use <code>/chk cc/mm/yy/cvv</code>\nREPO <a href='https://github.com/xbinner18/Mrbannker'>Here</a>"
     )
     
 
@@ -179,22 +179,24 @@ async def ch(message: types.Message):
     toc = time.perf_counter()
     if "incorrect_cvc" in rx.text:
         await message.reply(f"""
-<b>CC</b>➟ <code>{cc}</code>
+✅<b>CC</b>➟ <code>{cc}</code>
 <b>STATUS</b>➟ #ApprovedCCN
+<b>MSG</b>➟ {msg}
 <b>TOOK:</b> <code>{toc - tic:0.4f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>
 """)
     elif rx.status_code is 200:
         await message.reply(f"""
-<b>CC</b>➟ <code>{cc}</code>
-<b>STATUS</b>➟ ✅#ApprovedCVV
+❌<b>CC</b>➟ <code>{cc}</code>
+<b>STATUS</b>➟ #ApprovedCVV
 <b>TOOK:</b> <code>{toc - tic:0.4f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>
 """)
     else:
         await message.reply(f"""
-<b>CC</b>➟ <code>{cc}</code>
-<b>STATUS</b>➟ ❌Declined[{msg}]
+❌<b>CC</b>➟ <code>{cc}</code>
+<b>STATUS</b>➟ Declined
+<b>MSG</b>➟ {msg}
 <b>TOOK:</b> <code>{toc - tic:0.4f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>
 """)  
