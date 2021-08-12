@@ -6,10 +6,7 @@ You can find me on [telegram](https://telegram.me/MrBankerBot)
 ## STEP1:
 goto botfather create a bot copy the token paste at the time of deployment.
 ___
-## STEP 2:
-host api.php (000webhost) free af hosting provider and then get that host url and put at the time of deployement on heroku.
-
-Gateway Stripe uses braintree to get bininfo..
+Note: This adblocker needs fresh proxies per req...
 ___
 
 ## Click below deploy button to host it on heroku.
