@@ -19,9 +19,10 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TOKEN, parse_mode=types.ParseMode.HTML)
 dp = Dispatcher(bot)
 p = {
-    "http": "http://customer-ua42699717-cc-us:112898896210@54.39.209.193:7000"
+    "https": "https://customer-ua42699717-cc-us:112898896210@54.39.209.193:7000"
     }
 session = requests.session()
+session.proxies = p
 
 #random str
 N = 10
@@ -110,7 +111,7 @@ async def ch(message: types.Message):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     s = session.post("https://m.stripe.com/6",
-                     headers=headers, proxies = p)
+                     headers=headers)
     r = s.json()
     Guid = r["guid"]
     Muid = r["muid"]
@@ -137,7 +138,7 @@ async def ch(message: types.Message):
     }
     
     re = session.post("https://new-integration.adblockplus.org/",
-                     data=payload, headers=head, proxies = p)
+                     data=payload, headers=head)
     client = re.text
     pi = client[0:27]
     
@@ -173,7 +174,7 @@ async def ch(message: types.Message):
     }
     
     rx = session.post(f"https://api.stripe.com/v1/payment_intents/{pi}/confirm",
-                     data=load, headers=header, proxies = p)
+                     data=load, headers=header)
     res = rx.json()
     msg = res["error"]["message"]
     toc = time.perf_counter()
