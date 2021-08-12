@@ -9,9 +9,9 @@
       "value": "",
       "required": true
     },
-    "URL": {
+    "BLACKLISTED": {
       "description": "type your url where hosted api.php",
-      "value": "",
+      "value": "559558, 510805, 434256, 524499",
       "required": true
     }
   }
