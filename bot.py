@@ -18,13 +18,19 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=TOKEN, parse_mode=types.ParseMode.HTML)
 dp = Dispatcher(bot)
-p = {
-    "https": "https://customer-ua42699717-cc-us:112898896210@54.39.209.193:7000"
-    }
-session = requests.session()
-session.proxies = p
 
-#random str
+###USE YOUR ROTATING PROXY### NEED HQ PROXIES ELSE WONT WORK UPDATE THIS FILED
+"""
+proxy = {
+    "http": "http://deplaobr-rotate:ocjxpp5iucgk@p.webshare.io:80/",
+    "https": "http://deplaobr-rotate:ocjxpp5iucgk@p.webshare.io:80/",
+} 
+"""
+session = requests.session()
+
+# session.proxies = proxy #UNCOMMENT IT AFTER PROXIES
+
+#random str GEN FOR EMAIL
 N = 10
 rnd = ''.join(random.choices(string.ascii_lowercase +
                                 string.digits, k = N))
@@ -191,6 +197,8 @@ async def ch(message: types.Message):
 <b>TOOK:</b> <code>{toc - tic:0.4f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>
 """)
+    elif "Unrecognized request URL" in rx.text:
+        await message.reply("[UPDATE] PROXIES ERROR")
     elif rx.status_code is 200:
         await message.reply(f"""
 ❌<b>CC</b>➟ <code>{cc}</code>
