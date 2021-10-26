@@ -6,6 +6,7 @@ import string
 import random
 
 from aiogram import Bot, Dispatcher, executor, types
+from bs4 import BeautifulSoup
 
 ENV = bool(os.environ.get('ENV', True))
 TOKEN = os.environ.get("TOKEN", None)
@@ -90,6 +91,28 @@ TOOK ➟ <b>{toc - tic:0.4f}</b>(s)
 """)
     else:
         await message.reply("Error❌: REQ failed")
+        
+        
+@dp.message_handler(commands=["bin"], commands_prefix=PREFIX)
+async def binio(message: types.Message):
+    await message.answer_chat_action("typing")
+    BIN = message.text[len("/bin "): 11]
+    if len(BIN) < 6:
+        return await message.reply("Send bin not ass")
+    if not BIN:
+        return await message.reply("Did u Really Know how to use me.")
+    r = requests.get(f"https://bins.ws/search?bins={BIN}&bank=&country=").text
+    soup = BeautifulSoup(r, features="html.parser")
+    k = soup.find("div", {"class": "page"})
+    INFO = f"""
+═════════╕
+<b>BIN INFO</b>
+<code>{k.get_text()[62:]}</code>
+CheckedBy: <a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>
+<b>Bot:</b> @BinnerRoBoT
+╘═════════
+"""
+    await message.reply(INFO)
         
     
 @dp.message_handler(commands=['chk'], commands_prefix=PREFIX)
