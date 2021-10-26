@@ -1,2 +1,3 @@
 aiogram
 requests
+bs4
