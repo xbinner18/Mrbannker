@@ -1,18 +1,34 @@
 {
   "env": {
-    "ENV": {
-      "description": "Setting this to ANYTHING will enable env variables. But, you need to understand the code to know what to set here!",
-      "value": "ANYTHING"
+    "PREFIX": {
+      "description": "BOT CMD PREFIX Example !start /start .start",
+      "value": "/!."
     },
     "TOKEN": {
       "description": "Your bot token, as a string.",
       "value": "",
       "required": true
     },
+    "OWNER": {
+      "description": "Owner user_id.",
+      "value": "",
+      "required": true
+    },
+    "ANTISPAM": {
+      "description": "Antispam bot limit bot sleep for how many time in cmd spam",
+      "value": "",
+      "required": true
+    },
     "BLACKLISTED": {
       "description": "type your url where hosted api.php",
-      "value": "559558, 510805, 434256, 524499",
+      "value": "559558 510805 434256 524499",
       "required": true
     }
-  }
+  },
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
 }

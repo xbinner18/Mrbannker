@@ -5,3 +5,6 @@ services:
     environment:
       TOKEN: $TOKEN
       BLACKLISTED: $BLACKLISTED
+      PREFIX: $PREFIX
+      OWNER: $OWNER
+      ANTISPAM: $ANTISPAM
