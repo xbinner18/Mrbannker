@@ -1,7 +1,7 @@
 # MRBANKER BOT
 
 A telegram bot to check credit cards. written in py.
-You can find me on [telegram](https://telegram.me/MrBankerBot)
+make sure to update proxies!!
 
 
 ## Click below deploy button to host it on heroku.
