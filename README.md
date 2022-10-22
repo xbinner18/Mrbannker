@@ -11,5 +11,5 @@ make sure to update proxies!!
 
 [![Develop on Okteto](https://okteto.com/develop-okteto.svg)](https://cloud.okteto.com/deploy)
 
-You can contact me [tg](https://telegram.me/xbinner) my tg channel [here](https://telegram.me/binverse)
+You can contact me [tg](https://telegram.me/xbinner) my tg channel [here](https://telegram.me/accounttool)
 Feel free to donate me ..
