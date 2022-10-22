@@ -97,6 +97,7 @@ async def info(message: types.Message):
 <b>FIRSTNAME:</b> {first}
 <b>BOT:</b> {is_bot}
 <b>BOT-OWNER:</b> {await is_owner(user_id)}
+Bot By @Nati_Sam22
 ╘═════════''')
 
 
@@ -114,7 +115,7 @@ async def binio(message: types.Message):
                f'http://binchk-api.vercel.app/bin={BIN}'
     ).json()
     INFO = f'''
-BIN⇢ <code>{BIN}</code>
+BIN✅⇢ <code>{BIN}</code>
 Brand⇢ <u>{r["brand"]}</u>
 Type⇢ <u>{r["type"]}</u>
 Level⇢ <u>{r["level"]}</u>
@@ -126,6 +127,7 @@ SENDER: <a href="tg://user?id={ID}">{FIRST}</a>
 BOT⇢ @{BOT_USERNAME}
 OWNER⇢ <a href="tg://user?id={OWNER}">LINK</a>
 '''
+Bot By @Nati_Sam22
     await message.reply(INFO)
 
 
