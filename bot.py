@@ -11,6 +11,7 @@ import re
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.exceptions import Throttled
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from bs4 import BeautifulSoup as bs
 
 
 # Configure vars get from env or config.yml
@@ -150,17 +151,12 @@ async def binio(message: types.Message):
                    'Send bin not ass'
         )
     r = requests.get(
-               f'http://binchk-api.vercel.app/bin={BIN}'
-    ).json()
+               f'https://bins.ws/search?bins={BIN[:6]}'
+    ).text
+    soup = bs(r, features='html.parser')
+    k = soup.find("div", {"class": "page"})
     INFO = f'''
-BIN⇢ <code>{BIN}</code>
-Brand⇢ <u>{r["brand"]}</u>
-Type⇢ <u>{r["type"]}</u>
-Level⇢ <u>{r["level"]}</u>
-Bank⇢ <u>{r["bank"]}</u>
-Phone⇢ <u>{r["phone"]}</u>
-Currency⇢ <u>{r["currency"]}</u>
-Country⇢ <u>{r["country"]}({r["code"]})[{r["flag"]}]</u>
+{k.text[62:]}
 SENDER: <a href="tg://user?id={ID}">{FIRST}</a>
 BOT⇢ @{BOT_USERNAME}
 OWNER⇢ <a href="tg://user?id={OWNER}">LINK</a>
