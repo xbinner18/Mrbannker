@@ -48,9 +48,9 @@ session = requests.Session()
 
 # Random DATA
 letters = string.ascii_lowercase
-First = ''.join(random.choice(letters) for i in range(6))
-Last = ''.join(random.choice(letters) for i in range(6))
-PWD = ''.join(random.choice(letters) for i in range(10))
+First = ''.join(random.choice(letters) for _ in range(6))
+Last = ''.join(random.choice(letters) for _ in range(6))
+PWD = ''.join(random.choice(letters) for _ in range(10))
 Name = f'{First}+{Last}'
 Email = f'{First}.{Last}@gmail.com'
 UA = 'Mozilla/5.0 (X11; Linux i686; rv:102.0) Gecko/20100101 Firefox/102.0'
@@ -78,28 +78,16 @@ def gen(first_6: int, mm: int=None, yy: int=None, cvv: int=None):
     cc = ''.join(card_num)
     if mm is None:
         mm = random.randint(1, 12)
-    if len(str(mm)) < 2:
-        mm = f'0{mm}'
-    else:
-        mm = mm
-    if yy is None:
-        yy = random.randint(2023, 2028)
-    else:
-        yy = yy
+    mm = f'0{mm}' if len(str(mm)) < 2 else mm
+    yy = random.randint(2023, 2028) if yy is None else yy
     if cvv is None:
         cvv = random.randint(000, 999)
-    if len(str(cvv)) <= 2:
-        cvv = 999
-    else:
-        cvv = cvv
+    cvv = 999 if len(str(cvv)) <= 2 else cvv
     return f'{cc}|{mm}|{yy}|{cvv}'
 
 
 async def is_owner(user_id):
-    status = False
-    if user_id == OWNER:
-        status = True
-    return status
+    return user_id == OWNER
 
 
 @dp.message_handler(commands=['start', 'help'], commands_prefix=PREFIX)
@@ -180,7 +168,7 @@ async def genrate(message: types.Message):
         cards = gen(first_6=ccn, mm=mm, yy=yy, cvv=cvv)
     except IndexError:
         if len(x) == 1:
-            for i in range(0, 20):
+            for _ in range(20):
                 cards = gen(first_6=ccn)
         elif len(x) == 3:
             cards = gen(first_6=ccn, mm=mm, yy=yy)
