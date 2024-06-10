@@ -56,36 +56,6 @@ Email = f'{First}.{Last}@gmail.com'
 UA = 'Mozilla/5.0 (X11; Linux i686; rv:102.0) Gecko/20100101 Firefox/102.0'
 
 
-def gen(first_6: int, mm: int=None, yy: int=None, cvv: int=None):
-    BIN = 15-len(str(first_6))
-    card_no = [int(i) for i in str(first_6)]  # To find the checksum digit on
-    card_num = [int(i) for i in str(first_6)]  # Actual account number
-    seventh_15 = random.sample(range(BIN), BIN)  # Acc no (9 digits)
-    for i in seventh_15:
-        card_no.append(i)
-        card_num.append(i)
-    for t in range(0, 15, 2): 
-        # odd position digits
-        card_no[t] = card_no[t] * 2
-    for i in range(len(card_no)):
-        if card_no[i] > 9:  # deduct 9 from numbers greater than 9
-            card_no[i] -= 9
-    s = sum(card_no)
-    mod = s % 10
-    check_sum = 0 if mod == 0 else (10 - mod)
-    card_num.append(check_sum)
-    card_num = [str(i) for i in card_num]
-    cc = ''.join(card_num)
-    if mm is None:
-        mm = random.randint(1, 12)
-    mm = f'0{mm}' if len(str(mm)) < 2 else mm
-    yy = random.randint(2023, 2028) if yy is None else yy
-    if cvv is None:
-        cvv = random.randint(000, 999)
-    cvv = 999 if len(str(cvv)) <= 2 else cvv
-    return f'{cc}|{mm}|{yy}|{cvv}'
-
-
 async def is_owner(user_id):
     return user_id == OWNER
 
@@ -150,43 +120,6 @@ BOT⇢ @{BOT_USERNAME}
 OWNER⇢ <a href="tg://user?id={OWNER}">LINK</a>
 '''
     await message.reply(INFO)
-
-
-@dp.message_handler(commands=['gen'], commands_prefix=PREFIX)
-async def genrate(message: types.Message):
-    await message.answer_chat_action('typing')
-    ID = message.from_user.id
-    FIRST = message.from_user.first_name
-    if len(message.text) == 0:
-        return await message.reply("<b>Format:\n /gen 549184</b>")
-    try:
-        x = re.findall(r'\d+', message.text)
-        ccn = x[0]
-        mm = x[1]
-        yy = x[2]
-        cvv = x[3]
-        cards = gen(first_6=ccn, mm=mm, yy=yy, cvv=cvv)
-    except IndexError:
-        if len(x) == 1:
-            for _ in range(20):
-                cards = gen(first_6=ccn)
-        elif len(x) == 3:
-            cards = gen(first_6=ccn, mm=mm, yy=yy)
-        elif len(mm) == 3:
-            cards = gen(first_6=ccn, cvv=mm)
-        elif len(mm) == 4:
-            cards = gen(first_6=ccn, yy=mm)
-        else:
-            cards = gen(first_6=ccn, mm=mm)
-    await asyncio.sleep(3)
-    DATA = f'''
-Genrated 1 card of <code>{ccn}</code>
-<code>{cards}</code>
-BY: <a href="tg://user?id={ID}">{FIRST}</a>
-BOT⇢ @{BOT_USERNAME}
-OWNER⇢ <a href="tg://user?id={OWNER}">LINK</a>
-'''
-    await message.reply(DATA)
 
 
 @dp.message_handler(commands=['chk'], commands_prefix=PREFIX)
