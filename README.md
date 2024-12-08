@@ -11,5 +11,15 @@ make sure to update proxies!!
 
 [![Develop on Okteto](https://okteto.com/develop-okteto.svg)](https://cloud.okteto.com/deploy)
 
-You can contact me [tg](https://telegram.me/xbinner) my tg channel [here](https://telegram.me/binverse)
+## Deploy locally
+Edit config.yml
+
+set bot token get from [BotFather](https://telegram.me/BotFather)
+
+
+`cd Mrbannker`
+`pip3 install -r requirements.txt`
+`python3 bot.py`
+
+You can contact me [tg](https://telegram.me/nitin_181) my tg channel [here](https://telegram.me/binverse2)
 Feel free to donate me ..
