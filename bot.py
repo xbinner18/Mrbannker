@@ -196,6 +196,8 @@ async def ch(message: types.Message):
         pr = session.post('https://api.stripe.com/v1/tokens',
                           data=postdata, headers=HEADER)
         Id = pr.json()['id']
+        if pr.status_code != 200:
+            return await message.reply("<b>Site is Dead</b>")
 
         # hmm
         load = {
