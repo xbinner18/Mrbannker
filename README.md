@@ -16,7 +16,7 @@ Edit config.yml
 
 set bot token get from [BotFather](https://telegram.me/BotFather)
 
-
+`git clone https://github.com/xbinner18/Mrbannker.git`
 `cd Mrbannker`
 `pip3 install -r requirements.txt`
 `python3 bot.py`
